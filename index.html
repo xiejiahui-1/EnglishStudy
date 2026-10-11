@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS 听写错词本</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div>
+          <strong>Dictation Lab</strong>
+          <span>雅思听力错词听写</span>
+        </div>
+      </div>
+
+      <section class="sidebar-card">
+        <span class="label">今日目标</span>
+        <strong id="dailyGoal">0 / 30</strong>
+        <div class="progress-track">
+          <div class="progress-fill" id="goalProgress"></div>
+        </div>
+      </section>
+
+      <section class="sidebar-card soft">
+        <span class="label">当前题库</span>
+        <strong id="libraryCount">0 词</strong>
+        <small id="librarySource">正在载入错词本</small>
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">IELTS Listening Vocabulary</p>
+          <h1>听写你真正不会的词</h1>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="themeToggle" title="切换主题" aria-label="切换主题">
+            <span data-icon="sun"></span>
+          </button>
+          <label class="file-button" title="导入新的 CSV">
+            <span data-icon="upload"></span>
+            <span>导入 CSV</span>
+            <input id="csvInput" type="file" accept=".csv,text/csv">
+          </label>
+        </div>
+      </header>
+
+      <section class="study-layout">
+        <section class="practice-stage">
+          <div class="stage-media" aria-hidden="true"></div>
+
+          <div class="stage-content">
+            <div class="stage-toolbar">
+              <div class="select-group">
+                <label>
+                  章节
+                  <select id="chapterFilter"></select>
+                </label>
+                <label>
+                  试卷
+                  <select id="paperFilter"></select>
+                </label>
+                <label>
+                  模式
+                  <select id="modeSelect">
+                    <option value="all">全部错词</option>
+                    <option value="unmastered">未掌握</option>
+                    <option value="mistakes">只练错题</option>
+                  </select>
+                </label>
+              </div>
+
+              <button class="secondary-button" id="shuffleButton">
+                <span data-icon="shuffle"></span>
+                <span>随机</span>
+              </button>
+            </div>
+
+            <div class="dictation-card">
+              <div class="card-status">
+                <span class="pill" id="wordMeta">等待载入</span>
+                <span class="pill" id="wordIndex">0 / 0</span>
+              </div>
+
+              <div class="speaker-panel">
+                <button class="listen-button" id="speakButton" title="播放发音" aria-label="播放发音">
+                  <span data-icon="volume-2"></span>
+                </button>
+                <div>
+                  <p class="prompt-title">听音频，写出这个单词</p>
+                  <p class="prompt-subtitle" id="voiceStatus">使用浏览器英文语音朗读</p>
+                </div>
+              </div>
+
+              <div class="answer-row">
+                <input id="answerInput" type="text" autocomplete="off" spellcheck="false" placeholder="输入你听到的英文单词">
+                <button class="primary-button" id="checkButton">
+                  <span data-icon="check"></span>
+                  <span>检查</span>
+                </button>
+              </div>
+
+              <div class="result-box" id="resultBox">
+                点击播放按钮开始第一题。
+              </div>
+
+              <div class="meaning-check" id="meaningCheck" hidden>
+                <div>
+                  <span class="pill">释义检查</span>
+                  <h2>你知道这个词的意思吗？</h2>
+                  <p id="meaningText">先在心里说出中文意思，再选择是否知道。</p>
+                </div>
+                <div class="meaning-actions">
+                  <button class="secondary-button" id="unknownMeaningButton">
+                    <span data-icon="x"></span>
+                    <span>不知道意思</span>
+                  </button>
+                  <button class="primary-button" id="knownMeaningButton">
+                    <span data-icon="check"></span>
+                    <span>知道意思</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="ghost-button" id="slowSpeakButton">
+                  <span data-icon="snail"></span>
+                  <span>慢速</span>
+                </button>
+                <button class="ghost-button" id="revealButton">
+                  <span data-icon="eye"></span>
+                  <span>显示答案</span>
+                </button>
+                <button class="primary-button" id="nextButton">
+                  <span data-icon="arrow-right"></span>
+                  <span>下一词</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="side-stack">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>训练统计</h2>
+              <button class="text-button" id="resetStats">重置</button>
+            </div>
+            <div class="stats-grid">
+              <div>
+                <span>已练</span>
+                <strong id="attemptedCount">0</strong>
+              </div>
+              <div>
+                <span>正确</span>
+                <strong id="correctCount">0</strong>
+              </div>
+              <div>
+                <span>错题</span>
+                <strong id="wrongCount">0</strong>
+              </div>
+              <div>
+                <span>掌握</span>
+                <strong id="masteredCount">0</strong>
+              </div>
+              <div>
+                <span>认识意思</span>
+                <strong id="meaningKnownCount">0</strong>
+              </div>
+              <div>
+                <span>意思不熟</span>
+                <strong id="meaningUnknownCount">0</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>语音设置</h2>
+              <span class="pill" id="voiceCount">0 voices</span>
+            </div>
+            <div class="voice-controls">
+              <label>
+                声音
+                <select id="voiceSelect"></select>
+              </label>
+              <label>
+                速度
+                <input id="rateControl" type="range" min="0.55" max="1.1" step="0.05" value="0.82">
+              </label>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="word-section">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Word Bank</p>
+            <h2>错词列表</h2>
+          </div>
+          <div class="word-tools">
+            <button class="secondary-button" id="toggleWordList">
+              <span data-icon="eye"></span>
+              <span>显示列表</span>
+            </button>
+            <div class="search-box" id="wordSearchBox">
+              <span data-icon="search"></span>
+              <input id="wordSearch" type="search" placeholder="搜索单词">
+            </div>
+          </div>
+        </div>
+        <div class="word-grid" id="wordGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="data/words.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
